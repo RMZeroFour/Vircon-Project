@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   beamer: ^1.7.0
+  flutter_bloc: ^9.0.0
 
 dev_dependencies:
   flutter_test:
