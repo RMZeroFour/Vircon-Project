@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:vircon/features/connect/connect.dart';
+import 'package:vircon/features/controller/client_socket_bloc.dart';
+import 'package:vircon/features/controller/gamepad.dart';
 
 class ControllerView extends StatelessWidget {
   const ControllerView({super.key});
@@ -9,16 +13,50 @@ class ControllerView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Controller'),
+        title: BlocBuilder<ConnectionInfoCubit, ConnectionInfo?>(
+          builder: (context, state) =>
+              Text('Controller (${state?.host}:${state?.port})'),
+        ),
       ),
       body: Column(
         children: [
-          BlocBuilder<ConnectionInfoCubit, ConnectionInfo?>(
-            builder: (context, state) => Text('${state?.host}:${state?.port}'),
+          Expanded(
+            child: Center(
+              child: BlocBuilder<ClientSocketBloc, ClientSocketState>(
+                builder: (context, state) {
+                  return switch (state) {
+                    ClientSocketInitial() =>
+                      CircularProgressIndicator.adaptive(),
+                    ClientSocketConnecting() =>
+                      CircularProgressIndicator.adaptive(),
+                    ClientSocketFailedToConnect() => IconButton(
+                        onPressed: () => context
+                            .read<ClientSocketBloc>()
+                            .add(SendConnectionRequest()),
+                        icon: Icon(Icons.refresh),
+                      ),
+                    ClientSocketHandshaking() =>
+                      CircularProgressIndicator.adaptive(),
+                    ClientSocketFailedHandshake() => Text(state.reason),
+                    ClientSocketConnected() => Gamepad(),
+                    ClientSocketTerminated() => Icon(Icons.close),
+                  };
+                },
+              ),
+            ),
           ),
-          ElevatedButton(
-            onPressed: context.read<ConnectionInfoCubit>().clear,
-            child: const Text('Disconnect'),
+          BlocListener<ClientSocketBloc, ClientSocketState>(
+            listener: (context, state) {
+              if (state is ClientSocketTerminated) {
+                context.read<ConnectionInfoCubit>().clear();
+              }
+            },
+            child: ElevatedButton(
+              onPressed: () => context
+                  .read<ClientSocketBloc>()
+                  .add(SendTerminationRequest()),
+              child: const Text('Disconnect'),
+            ),
           ),
         ],
       ),
