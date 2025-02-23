@@ -29,15 +29,30 @@ class ControllerView extends StatelessWidget {
                       CircularProgressIndicator.adaptive(),
                     ClientSocketConnecting() =>
                       CircularProgressIndicator.adaptive(),
-                    ClientSocketFailedToConnect() => IconButton(
-                        onPressed: () => context
-                            .read<ClientSocketBloc>()
-                            .add(SendConnectionRequest()),
-                        icon: Icon(Icons.refresh),
+                    ClientSocketFailedToConnect() => Column(
+                        children: [
+                          Text('Failed to connect'),
+                          IconButton(
+                            onPressed: () => context
+                                .read<ClientSocketBloc>()
+                                .add(SendConnectionRequest()),
+                            icon: Icon(Icons.refresh),
+                          ),
+                        ],
                       ),
                     ClientSocketHandshaking() =>
                       CircularProgressIndicator.adaptive(),
-                    ClientSocketFailedHandshake() => Text(state.reason),
+                    ClientSocketFailedHandshake() => Column(
+                        children: [
+                          Text(state.reason),
+                          IconButton(
+                            onPressed: () => context
+                                .read<ClientSocketBloc>()
+                                .add(SendConnectionRequest()),
+                            icon: Icon(Icons.refresh),
+                          ),
+                        ],
+                      ),
                     ClientSocketConnected() => Gamepad(),
                     ClientSocketTerminated() => Icon(Icons.close),
                   };
