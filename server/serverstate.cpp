@@ -1,6 +1,6 @@
-#include "serverstate.h"
+#include "serverstate.hpp"
 
-#include "connection.h"
+#include "connection.hpp"
 
 #include <Poco/Net/IPAddress.h>
 #include <Poco/Net/NetworkInterface.h>

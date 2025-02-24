@@ -1,6 +1,6 @@
 #pragma once
 
-#include "snapshot.h"
+#include "snapshot.hpp"
 
 #include <libevdev/libevdev.h>
 #include <libevdev/libevdev-uinput.h>

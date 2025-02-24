@@ -1,4 +1,4 @@
-#include "connection.h"
+#include "connection.hpp"
 
 #include <Poco/BinaryReader.h>
 #include <Poco/BinaryWriter.h>

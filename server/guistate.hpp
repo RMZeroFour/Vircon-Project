@@ -1,6 +1,6 @@
 #pragma once
 
-#include "serverstate.h"
+#include "serverstate.hpp"
 
 #include <notcurses/notcurses.h>
 

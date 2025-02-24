@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gamepad.h"
+#include "gamepad.hpp"
 
 #include <Poco/Net/ServerSocket.h>
 #include <Poco/Net/TCPServer.h>

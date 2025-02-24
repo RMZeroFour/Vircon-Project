@@ -1,6 +1,6 @@
-#include "guistate.h"
-#include "serverstate.h"
-#include "version.h"
+#include "guistate.hpp"
+#include "serverstate.hpp"
+#include "version.hpp"
 
 #include <notcurses/notcurses.h>
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "serverstate.h"
+#include "serverstate.hpp"
 
 #include <Poco/Net/StreamSocket.h>
 #include <Poco/Net/TCPServerConnection.h>
