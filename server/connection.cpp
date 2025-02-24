@@ -10,9 +10,9 @@ using namespace Poco::Net;
 using Poco::BinaryReader;
 using Poco::BinaryWriter;
 
-GamepadConnection::GamepadConnection(const StreamSocket& socket, ServerState& server_state)
+GamepadConnection::GamepadConnection(const StreamSocket& socket, ServerState& serverState)
     : TCPServerConnection{ socket }
-    , _server_state{ server_state }
+    , mServerState{ serverState }
 { }
 
 void GamepadConnection::run()
@@ -64,27 +64,27 @@ void GamepadConnection::handle_version_1(BinaryReader& reader, BinaryWriter& wri
         NoGamepadAvailable = 1,
     };
 
-    int index{ _server_state.next_free_gamepad() };
+    int index{ mServerState.next_free_gamepad() };
     if (index != -1)
     {
         writer << GamepadAvailable;
         writer.flush();
 
-        uint8_t name_length{};
-        reader >> name_length;
+        uint8_t nameLength{};
+        reader >> nameLength;
         if (!reader.fail())
         {
             std::string name{};
-            reader.readRaw(name_length, name);
+            reader.readRaw(nameLength, name);
             if (!reader.fail())
             {
-                _server_state.connect_gamepad(index, name);
+                mServerState.connect_gamepad(index, name);
                 
                 Snapshot ss{};
                 uint16_t buttons{ 0 };
                 uint64_t axes{ 0 };
 
-                while (_server_state.is_running() && _server_state.update_gamepad(index, ss))
+                while (mServerState.is_running() && mServerState.update_gamepad(index, ss))
                 {
                     reader >> buttons >> axes;
                     if (reader.fail())
@@ -113,7 +113,7 @@ void GamepadConnection::handle_version_1(BinaryReader& reader, BinaryWriter& wri
                     ss.ry = (axes >> 48) & 0xFFFF;
                 }
 
-                _server_state.disconnect_gamepad(index);
+                mServerState.disconnect_gamepad(index);
             }
         }
     }

@@ -30,7 +30,7 @@ public:
 
     void toggle_locked(int index);
 
-    void connect_gamepad(int index, const std::string& client_name);
+    void connect_gamepad(int index, const std::string& clientName);
     void disconnect_gamepad(int index);
     bool update_gamepad(int index, const Snapshot& ss);
 
@@ -46,16 +46,16 @@ private:
     struct GamepadState
     {
         Gamepad gamepad;
-        bool is_connected;
-        bool is_locked;
-        std::string client_name = "Samsoong Noot Nein";
-        Snapshot latest_snapshot;
+        bool isConnected;
+        bool isLocked;
+        std::string clientName = "Samsoong Noot Nein";
+        Snapshot latestSnapshot;
     };
 
 private:
-    std::atomic<bool> _running;
-    std::shared_mutex _mutex;
-    std::vector<GamepadState> _gamepad_states;
-    Poco::Net::ServerSocket _socket;
-    Poco::Net::TCPServer _server;
+    std::atomic<bool> mRunning;
+    std::shared_mutex mMutex;
+    std::vector<GamepadState> mGamepadStates;
+    Poco::Net::ServerSocket mSocket;
+    Poco::Net::TCPServer mServer;
 };

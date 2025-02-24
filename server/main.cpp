@@ -10,9 +10,9 @@
 
 #include <iostream>
 
-void add_milliseconds(const timespec& source, timespec& target, int delay_ms)
+void add_milliseconds(const timespec& source, timespec& target, int delayMs)
 {
-    target.tv_nsec = source.tv_nsec + 1'000'000 * delay_ms;
+    target.tv_nsec = source.tv_nsec + 1'000'000 * delayMs;
     target.tv_sec = source.tv_sec + target.tv_nsec / 1'000'000'000;
     target.tv_nsec %= 1'000'000'000;
 }
@@ -28,7 +28,7 @@ void app_main(notcurses* nc)
     
     notcurses_render(nc);
 
-    const int timeout_ms{ 250 };
+    const int timeoutMs{ 250 };
     timespec now{}, deadline{};
     
     char32_t key{};
@@ -36,7 +36,7 @@ void app_main(notcurses* nc)
     while (true)
     {
         clock_gettime(CLOCK_MONOTONIC, &now);
-        add_milliseconds(now, deadline, timeout_ms);
+        add_milliseconds(now, deadline, timeoutMs);
         
         key = notcurses_get(nc, &deadline, &input);
         if (key == (char32_t)-1)

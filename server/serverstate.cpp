@@ -17,18 +17,18 @@ class GamepadConnectionFactory
     : public TCPServerConnectionFactory
 {
 public:
-    GamepadConnectionFactory(ServerState& server_state)
-        : _server_state{ server_state }
+    GamepadConnectionFactory(ServerState& serverState)
+        : mServerState{ serverState }
     { }
 
 public:
 	TCPServerConnection* createConnection(const StreamSocket& socket)
 	{
-		return new GamepadConnection(socket, _server_state);
+		return new GamepadConnection(socket, mServerState);
 	}
 
 private:
-    ServerState& _server_state;
+    ServerState& mServerState;
 };
 
 SocketAddress get_socket_endpoint()
@@ -45,11 +45,11 @@ SocketAddress get_socket_endpoint()
     return { address, 0 };
 }
 
-TCPServer create_server(const ServerSocket& socket, ServerState& server_state)
+TCPServer create_server(const ServerSocket& socket, ServerState& serverState)
 {
     return
     {
-        new GamepadConnectionFactory{ server_state },
+        new GamepadConnectionFactory{ serverState },
         socket,
         new TCPServerParams{}
     };
@@ -57,88 +57,88 @@ TCPServer create_server(const ServerSocket& socket, ServerState& server_state)
 }
 
 ServerState::ServerState()
-    : _running{}
-    , _mutex{}
-    , _gamepad_states{}
-    , _socket{ get_socket_endpoint() }
-    , _server{ create_server(_socket, *this) }
+    : mRunning{}
+    , mMutex{}
+    , mGamepadStates{}
+    , mSocket{ get_socket_endpoint() }
+    , mServer{ create_server(mSocket, *this) }
 {}
 
 int ServerState::count() const
 {
-    return _gamepad_states.size();
+    return mGamepadStates.size();
 }
 
 bool ServerState::is_running() const
 {
-    return _running.load();
+    return mRunning.load();
 }
 
 bool ServerState::is_connected(int index) const
 {
-    return _gamepad_states.at(index).is_connected;
+    return mGamepadStates.at(index).isConnected;
 }
 
 bool ServerState::is_locked(int index) const
 {
-    return _gamepad_states.at(index).is_locked;
+    return mGamepadStates.at(index).isLocked;
 }
 
 std::string ServerState::client_name(int index) const
 {
-    return _gamepad_states.at(index).client_name;
+    return mGamepadStates.at(index).clientName;
 }
 
 const Snapshot& ServerState::latest_snapshot(int index) const
 {
-    return _gamepad_states.at(index).latest_snapshot;
+    return mGamepadStates.at(index).latestSnapshot;
 }
 
 void ServerState::add_gamepad()
 {
-    std::unique_lock ul{ _mutex }; 
-    _gamepad_states.emplace_back();
+    std::unique_lock ul{ mMutex }; 
+    mGamepadStates.emplace_back();
 }
 
 void ServerState::remove_gamepad()
 {
-    std::unique_lock ul{ _mutex }; 
-    _gamepad_states.pop_back();
+    std::unique_lock ul{ mMutex }; 
+    mGamepadStates.pop_back();
 }
 
 void ServerState::toggle_locked(int index)
 {
-    std::shared_lock sl{ _mutex };
-    _gamepad_states[index].is_locked = !_gamepad_states[index].is_locked;
+    std::shared_lock sl{ mMutex };
+    mGamepadStates[index].isLocked = !mGamepadStates[index].isLocked;
 }
 
-void ServerState::connect_gamepad(int index, const std::string& client_name)
+void ServerState::connect_gamepad(int index, const std::string& clientName)
 {
-    std::shared_lock sl{ _mutex }; 
-    _gamepad_states[index].is_connected = true;
-    _gamepad_states[index].client_name = client_name;
+    std::shared_lock sl{ mMutex }; 
+    mGamepadStates[index].isConnected = true;
+    mGamepadStates[index].clientName = clientName;
 }
 
 void ServerState::disconnect_gamepad(int index)
 {
-    std::shared_lock sl{ _mutex };
-    _gamepad_states[index].is_connected = false;
-    _gamepad_states[index].client_name = "";
+    std::shared_lock sl{ mMutex };
+    mGamepadStates[index].isConnected = false;
+    mGamepadStates[index].clientName = "";
 }
 
 bool ServerState::update_gamepad(int index, const Snapshot& ss)
 {
-    std::shared_lock sl{ _mutex };
+    std::shared_lock sl{ mMutex };
 
-    if (index >= _gamepad_states.size())
+    if (index >= mGamepadStates.size())
     {
         return false;
     }
 
-    GamepadState& gps{ _gamepad_states[index] };
-    if (!gps.is_locked)
+    GamepadState& gps{ mGamepadStates[index] };
+    if (!gps.isLocked)
     {
-        gps.latest_snapshot = ss;
+        gps.latestSnapshot = ss;
         gps.gamepad.send_input(ss);
     }
 
@@ -147,11 +147,11 @@ bool ServerState::update_gamepad(int index, const Snapshot& ss)
 
 int ServerState::next_free_gamepad()
 {
-    std::unique_lock ul{ _mutex };
+    std::unique_lock ul{ mMutex };
 
-    for (int i = 0; i < _gamepad_states.size(); ++i)
+    for (int i = 0; i < mGamepadStates.size(); ++i)
     {
-        if (!_gamepad_states[i].is_connected)
+        if (!mGamepadStates[i].isConnected)
         {
             return i;
         }
@@ -162,22 +162,22 @@ int ServerState::next_free_gamepad()
 
 std::string ServerState::server_host() const
 {
-    return _socket.address().host().toString();
+    return mSocket.address().host().toString();
 }
 
 uint16_t ServerState::server_port() const
 {
-    return _socket.address().port();
+    return mSocket.address().port();
 }
 
 void ServerState::start_server_async()
 {
-    _running.store(true);
-    _server.start();
+    mRunning.store(true);
+    mServer.start();
 }
 
 void ServerState::stop_server()
 {
-    _server.stop();
-    _running.store(false);
+    mServer.stop();
+    mRunning.store(false);
 }

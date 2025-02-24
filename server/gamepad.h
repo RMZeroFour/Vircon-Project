@@ -17,5 +17,5 @@ public:
     void send_input(const Snapshot& ss);
 
 private:
-    std::unique_ptr<libevdev_uinput, decltype(&libevdev_uinput_destroy)> _input_device;
+    std::unique_ptr<libevdev_uinput, decltype(&libevdev_uinput_destroy)> mInputDevice;
 };
