@@ -1,6 +1,6 @@
 #pragma once
 
-#include "serverstate.h"
+#include "serverstate.hpp"
 
 #include <notcurses/notcurses.h>
 
@@ -22,13 +22,13 @@ private:
     void render_info();
 
 private:
-    ServerState& _server;
+    ServerState& mServer;
 
-    ncplane* _std_plane;
-    ncplane* _title_plane;
-    ncplane* _menu_plane;
-    ncplane* _info_plane;
+    ncplane* mStdPlane;
+    ncplane* mTitlePlane;
+    ncplane* mMenuPlane;
+    ncplane* mInfoPlane;
 
-    int _menu_index;
-    int _submenu_index;
+    int mMenuIndex;
+    int mSubmenuIndex;
 };
