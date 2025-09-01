@@ -1,6 +1,11 @@
 # The Vircon Project
 
-The Vircon Project transforms your smartphone into a virtual game controller for Linux and Wine games.
+The Vircon Project transforms your smartphone into a virtual game controller for Linux and Wine games. The project currently includes the following components:
+
+## [Vircon Server](server/README.md)
+
+- Uses `python-libevdev` to emulate virtual game controllers on Linux.
+- Supports v1.0 of the Vircon Protocol.
 
 ## License
 
