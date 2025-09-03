@@ -1,1 +1,2 @@
 libevdev==0.12
+pygame==2.6.1

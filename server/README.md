@@ -8,6 +8,7 @@ The **Vircon Server** runs on Linux systems, and receives input events from conn
 - A Python 3.12+ interpreter
 - The [`python-libevdev`](https://pypi.org/project/libevdev/) package, either from PyPI, or your system package manager.
 - The [`libevdev`](https://www.freedesktop.org/wiki/Software/libevdev/) library from your system package manager.
+- The [`pygame`](https://pypi.org/project/pygame/) package, either from PyPI, or your system package manager, for the interactive test client.
 
 ### Build Steps
 
