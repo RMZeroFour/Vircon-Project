@@ -1,6 +1,6 @@
 # The Vircon Server
 
-The **Vircon Server** runs on Linux systems, and receives input events from connected Vircon clients with a compatible Vircon Protocol version. These inputs are then injected into the host system using `libevdev`, allowing the client to act as a virtual gamepad or input device.
+The **Vircon Server** runs on Linux systems, and receives input events from connected Vircon clients with a compatible **Vircon Protocol** version. These inputs are then injected into the host system using `libevdev`, allowing the client to act as a virtual gamepad or input device.
 
 
 ### Requirements

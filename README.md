@@ -5,7 +5,12 @@ The Vircon Project transforms your smartphone into a virtual game controller for
 ## [Vircon Server](server/README.md)
 
 - Uses `python-libevdev` to emulate virtual game controllers on Linux.
-- Supports v1.0 of the Vircon Protocol.
+- Supports v0.1 of the Vircon Protocol.
+
+## [Vircon Protocol](protocol/README.md)
+
+- Connects clients to the server over TCP.
+- Details v0.1 of the Vircon Protocol.
 
 ## License
 
