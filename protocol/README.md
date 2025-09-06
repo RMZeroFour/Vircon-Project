@@ -47,6 +47,62 @@ sequenceDiagram
     end
 ```
 
+### Server State Machine
+
+```mermaid
+stateDiagram-v2
+    [*] --> WaitingForVersion : Client connected
+
+    WaitingForVersion --> RejectingVersion : Version unsupported
+    WaitingForVersion --> AcceptingVersion : Version supported
+    WaitingForVersion --> ClosingConnection : Version malformed
+
+    RejectingVersion --> ClosingConnection : Send 0x00
+
+    AcceptingVersion --> WaitingForNameLength : Send 0x01
+    WaitingForNameLength --> WaitingForName
+
+    WaitingForName --> AssignPlayerNumber
+    WaitingForName --> ClosingConnection : Name read failed
+
+    AssignPlayerNumber --> WaitingForInput : Send player number
+
+    WaitingForInput --> TerminatingConnection : Received 10 bytes of 0xFF
+    TerminatingConnection --> ClosingConnection : Send 0x01
+
+    WaitingForInput --> WritingInputToSystem
+    WritingInputToSystem --> WaitingForInput : Update virtual gamepad
+
+    ClosingConnection --> [*]
+```
+
+### Client State Machine
+
+```mermaid
+stateDiagram-v2
+    [*] --> SendingVersion : Server connected
+
+    SendingVersion --> WaitingForVersionResponse : Send version (major, minor)
+
+    WaitingForVersionResponse --> ClosingConnection : Version not supported
+    WaitingForVersionResponse --> SendingNameLength : Version supported
+
+    SendingNameLength --> SendingName : Send name length
+    SendingName --> WaitingForPlayerNumber : Send name bytes
+
+    WaitingForPlayerNumber --> GetInputFromInterface
+
+    GetInputFromInterface --> SendingInput
+    SendingInput --> GetInputFromInterface : Send input snapshot
+
+    GetInputFromInterface --> SendingTermination
+    SendingTermination --> WaitingForTerminationAck : Send 10 bytes of 0xFF
+
+    WaitingForTerminationAck --> ClosingConnection : Receive 0x01
+
+    ClosingConnection --> [*]
+```
+
 ### Message Formats
 
 | # | Sender | Format            | Length   | Description                                  |
