@@ -6,6 +6,10 @@ class Gamepad:
     DEVICE_NAME = 'Vircon Virtual Controller'
 
     def __init__(self) -> None:
+        self.__uinput: libevdev.Device = None
+        self.__latest: Snapshot = None
+
+    def __enter__(self):
         device = libevdev.Device()
         device.name = Gamepad.DEVICE_NAME
 
@@ -31,9 +35,12 @@ class Gamepad:
         device.enable(libevdev.EV_ABS.ABS_RY, absinfo)
 
         self.__uinput = device.create_uinput_device()
-        self.__latest = None
-
         self.set_state(Snapshot())
+
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        del self.__uinput._uinput
 
     def get_state(self) -> Snapshot:
         return self.__latest
