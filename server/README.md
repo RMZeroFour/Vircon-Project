@@ -16,3 +16,17 @@ The **Vircon Server** runs on Linux systems, and receives input events from conn
 pip3 install -r requirements.txt
 python3 main.py
 ```
+
+### Test Steps
+
+For the random input CLI client:
+```bash
+pip3 install -r requirements.txt
+python3 random_client.py
+```
+
+For the GUI client:
+```bash
+pip3 install -r requirements-test.txt
+python3 gui_client.py
+```
