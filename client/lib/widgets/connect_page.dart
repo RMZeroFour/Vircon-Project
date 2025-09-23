@@ -1,4 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:vircon_client/presentation/connection_cubit.dart';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:flutter/material.dart' hide ConnectionState;
 
 class ConnectPage extends StatefulWidget {
   const ConnectPage({super.key});
@@ -42,12 +46,25 @@ class _ConnectPageState extends State<ConnectPage> {
             controller: _portField,
             decoration: const InputDecoration(hintText: 'Port'),
           ),
-          ElevatedButton(
-            onPressed: () => Navigator.of(context).pushNamed(
-              '/controller',
-              arguments: {'host': _hostField.text, 'port': _portField.text},
-            ),
-            child: const Text('Connect'),
+          BlocConsumer<ConnectionCubit, ConnectionState>(
+            listener: (context, state) {
+              if (state == ConnectionState.connected) {
+                Navigator.of(context).pushNamed('/controller');
+              }
+            },
+            builder: (context, state) {
+              if (state == ConnectionState.notConnected ||
+                  state == ConnectionState.disconnected) {
+                return ElevatedButton(
+                  onPressed: () => context.read<ConnectionCubit>().connect(
+                    _hostField.text,
+                    int.parse(_portField.text),
+                  ),
+                  child: const Text('Connect'),
+                );
+              }
+              return CircularProgressIndicator();
+            },
           ),
         ],
       ),
