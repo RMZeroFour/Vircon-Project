@@ -1,36 +1,25 @@
-import 'package:dart_mappable/dart_mappable.dart';
+class Snapshot {
+  bool a;
+  bool b;
+  bool x;
+  bool y;
+  bool l1;
+  bool r1;
+  bool l2;
+  bool r2;
+  bool dUp;
+  bool dDown;
+  bool dLeft;
+  bool dRight;
+  bool select;
+  bool start;
 
-part 'snapshot_model.mapper.dart';
+  int leftJsX;
+  int leftJsY;
+  int rightJsX;
+  int rightJsY;
 
-@MappableClass()
-class Axes with AxesMappable {
-  final int x;
-  final int y;
-
-  const Axes({this.x = 0, this.y = 0});
-}
-
-@MappableClass()
-class Snapshot with SnapshotMappable {
-  final bool a;
-  final bool b;
-  final bool x;
-  final bool y;
-  final bool l1;
-  final bool r1;
-  final bool l2;
-  final bool r2;
-  final bool dUp;
-  final bool dDown;
-  final bool dLeft;
-  final bool dRight;
-  final bool select;
-  final bool start;
-
-  final Axes leftJs;
-  final Axes rightJs;
-
-  const Snapshot({
+  Snapshot({
     this.a = false,
     this.b = false,
     this.x = false,
@@ -45,7 +34,9 @@ class Snapshot with SnapshotMappable {
     this.dRight = false,
     this.select = false,
     this.start = false,
-    this.leftJs = const Axes(),
-    this.rightJs = const Axes(),
+    this.leftJsX = 0,
+    this.leftJsY = 0,
+    this.rightJsX = 0,
+    this.rightJsY = 0,
   });
 }

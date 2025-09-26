@@ -85,10 +85,10 @@ class SocketConnectionService {
     final buffer = ByteData.sublistView(bytes);
 
     buffer.setUint16(0, bitfield, Endian.big);
-    buffer.setInt16(2, ss.leftJs.x, Endian.big);
-    buffer.setInt16(4, ss.leftJs.y, Endian.big);
-    buffer.setInt16(6, ss.rightJs.x, Endian.big);
-    buffer.setInt16(8, ss.rightJs.y, Endian.big);
+    buffer.setInt16(2, ss.leftJsX, Endian.big);
+    buffer.setInt16(4, ss.leftJsY, Endian.big);
+    buffer.setInt16(6, ss.rightJsX, Endian.big);
+    buffer.setInt16(8, ss.rightJsY, Endian.big);
 
     return bytes;
   }

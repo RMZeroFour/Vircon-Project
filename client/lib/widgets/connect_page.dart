@@ -48,13 +48,12 @@ class _ConnectPageState extends State<ConnectPage> {
           ),
           BlocConsumer<ConnectionCubit, ConnectionState>(
             listener: (context, state) {
-              if (state == ConnectionState.connected) {
+              if (state is Connected) {
                 Navigator.of(context).pushNamed('/controller');
               }
             },
             builder: (context, state) {
-              if (state == ConnectionState.notConnected ||
-                  state == ConnectionState.disconnected) {
+              if (state is NotConnected) {
                 return ElevatedButton(
                   onPressed: () => context.read<ConnectionCubit>().connect(
                     _hostField.text,
