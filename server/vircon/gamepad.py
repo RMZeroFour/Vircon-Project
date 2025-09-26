@@ -50,8 +50,8 @@ class Gamepad:
         self.__uinput.send_events([
             libevdev.InputEvent(libevdev.EV_KEY.BTN_SOUTH, snapshot.a),
             libevdev.InputEvent(libevdev.EV_KEY.BTN_EAST, snapshot.b),
-            libevdev.InputEvent(libevdev.EV_KEY.BTN_NORTH, snapshot.x),
-            libevdev.InputEvent(libevdev.EV_KEY.BTN_WEST, snapshot.y),
+            libevdev.InputEvent(libevdev.EV_KEY.BTN_NORTH, snapshot.y),
+            libevdev.InputEvent(libevdev.EV_KEY.BTN_WEST, snapshot.x),
             libevdev.InputEvent(libevdev.EV_KEY.BTN_TL, snapshot.l1),
             libevdev.InputEvent(libevdev.EV_KEY.BTN_TR, snapshot.r1),
             libevdev.InputEvent(libevdev.EV_KEY.BTN_TL2, snapshot.l2),
